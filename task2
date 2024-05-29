@@ -1,0 +1,100 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class ToDoListApp {
+
+    // Inner class to represent a Task
+    private static class Task {
+        String description;
+        boolean isCompleted;
+
+        Task(String description) {
+            this.description = description;
+            this.isCompleted = false;
+        }
+
+        @Override
+        public String toString() {
+            return (isCompleted ? "[x] " : "[ ] ") + description;
+        }
+    }
+
+    private static ArrayList<Task> tasks = new ArrayList<>();
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String command;
+
+        System.out.println("To-Do List Application");
+        while (true) {
+            System.out.println("\nCommands: add, delete, complete, list, exit");
+            System.out.print("Enter command: ");
+            command = scanner.nextLine().trim().toLowerCase();
+
+            switch (command) {
+                case "add":
+                    addTask(scanner);
+                    break;
+                case "delete":
+                    deleteTask(scanner);
+                    break;
+                case "complete":
+                    completeTask(scanner);
+                    break;
+                case "list":
+                    listTasks();
+                    break;
+                case "exit":
+                    System.out.println("Exiting To-Do List Application.");
+                    scanner.close();
+                    return;
+                default:
+                    System.out.println("Invalid command. Please try again.");
+                    break;
+            }
+        }
+    }
+    private static void addTask(Scanner scanner) {
+        System.out.print("Enter task description: ");
+        String description = scanner.nextLine();
+        tasks.add(new Task(description));
+        System.out.println("Task added.");
+    }
+
+    private static void deleteTask(Scanner scanner) {
+        System.out.print("Enter task number to delete: ");
+        int taskNumber = scanner.nextInt();
+        scanner.nextLine();  // Consume newline
+
+        if (taskNumber > 0 && taskNumber <= tasks.size()) {
+            tasks.remove(taskNumber - 1);
+            System.out.println("Task deleted.");
+        } else {
+            System.out.println("Invalid task number. Please try again.");
+        }
+    }
+
+    private static void completeTask(Scanner scanner) {
+        System.out.print("Enter task number to mark as completed: ");
+        int taskNumber = scanner.nextInt();
+        scanner.nextLine();  // Consume newline
+
+        if (taskNumber > 0 && taskNumber <= tasks.size()) {
+            Task task = tasks.get(taskNumber - 1);
+            task.isCompleted = true;
+            System.out.println("Task marked as completed.");
+        } else {
+            System.out.println("Invalid task number. Please try again.");
+        }
+    }
+    private static void listTasks() {
+        if (tasks.isEmpty()) {
+            System.out.println("No tasks in the list.");
+        } else {
+            System.out.println("To-Do List:");
+            for (int i = 0; i < tasks.size(); i++) {
+                System.out.println((i + 1) + ". " + tasks.get(i));
+            }
+        }
+    }
+}
